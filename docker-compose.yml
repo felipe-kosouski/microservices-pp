@@ -1,0 +1,17 @@
+﻿version: '3.4'
+
+services:
+
+  music.api:
+    image: ${DOCKER_REGISTRY-}music
+    build:
+      context: .
+      dockerfile: Services/Music.API/Dockerfile
+
+  movie.api:
+    image: ${DOCKER_REGISTRY-}movie
+    build:
+      context: .
+      dockerfile: Services/Movie.API/Dockerfile
+      
+
