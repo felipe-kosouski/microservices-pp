@@ -1,23 +1,52 @@
 ﻿version: '3.4'
 
 services:
+  eureka:
+    image: steeltoeoss/eureka-server
+    hostname: "eureka"
+    ports:
+      - "8761:8761"
 
   music.api:
     image: ${DOCKER_REGISTRY-}music
+    restart: always
+    depends_on: 
+      - eureka
+      - sql.database
     build:
       context: .
       dockerfile: Services/Music.API/Dockerfile
+      
 
   movie.api:
     image: ${DOCKER_REGISTRY-}movie
+    restart: always
+    depends_on: 
+      - eureka
+      - sql.database
     build:
       context: .
       dockerfile: Services/Movie.API/Dockerfile
       
-      
   gateway:
     image: ${DOCKER_REGISTRY-}gateway
+    restart: always
+    depends_on: 
+      - eureka
     build:
       context: .
       dockerfile: Gateway/Dockerfile
+
+  sql.database:
+      container_name: dockersql.database
+      image: microsoft/mssql-server-linux:2017-latest
+      environment:
+        - SA_PASSWORD=felipe123
+        - ACCEPT_EULA=Y
+      ports:
+        - "1433:1433"
+    
+
+  
+
 

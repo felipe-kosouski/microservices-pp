@@ -6,10 +6,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Movie.API.Domain.Repositories;
+using Movie.API.Domain.Services;
+using Movie.API.Persistence.Contexts;
+using Movie.API.Persistence.Repositories;
+using Movie.API.Services;
+using Steeltoe.Discovery.Client;
 
 namespace Movie.API
 {
@@ -25,7 +32,15 @@ namespace Movie.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDiscoveryClient(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Default"));
+            });
+
+            services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IMovieService, MovieService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +58,7 @@ namespace Movie.API
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseDiscoveryClient();
         }
     }
 }

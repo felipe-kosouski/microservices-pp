@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Steeltoe.Discovery.Client;
 
 namespace Gateway
 {
@@ -25,6 +26,7 @@ namespace Gateway
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDiscoveryClient(configuration);
             services.AddOcelot(configuration);
         }
 
@@ -37,6 +39,7 @@ namespace Gateway
             }
 
             app.UseOcelot().Wait();
+            app.UseDiscoveryClient();
         }
     }
 }

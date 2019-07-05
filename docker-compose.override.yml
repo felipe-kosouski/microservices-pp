@@ -1,6 +1,7 @@
 ﻿version: '3.4'
 
 services:
+
   gateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -18,4 +19,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "5557:80"
+      - "5557:80" 
+
+
