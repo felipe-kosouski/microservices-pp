@@ -1,6 +1,22 @@
 ﻿version: '3.4'
 
 services:
+  sqlmusicdatabase:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      - SA_PASSWORD=Fk-028594
+      - ACCEPT_EULA=Y
+    ports:
+      - "1434:1433"
+
+  sqlmoviedatabase:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      - SA_PASSWORD=Fk-028594
+      - ACCEPT_EULA=Y
+    ports:
+      - "1435:1433"   
+
   eureka:
     image: steeltoeoss/eureka-server
     hostname: "eureka"
@@ -9,44 +25,47 @@ services:
 
   music.api:
     image: ${DOCKER_REGISTRY-}music
+    hostname: "musicservice"
     restart: always
-    depends_on: 
+    ports:
+      - "5557:80"
+    links:
       - eureka
-      - sql.database
     build:
       context: .
-      dockerfile: Services/Music.API/Dockerfile
-      
+      dockerfile: Services/Music.API/Dockerfile  
+    depends_on: 
+      - eureka
+      - sqlmusicdatabase
 
   movie.api:
     image: ${DOCKER_REGISTRY-}movie
+    hostname: "movieservice"
     restart: always
-    depends_on: 
+    ports:
+      - "5556:80"
+    links:
       - eureka
-      - sql.database
     build:
       context: .
-      dockerfile: Services/Movie.API/Dockerfile
+      dockerfile: Services/Movie.API/Dockerfile  
+    depends_on: 
+      - eureka
+      - sqlmoviedatabase
       
   gateway:
     image: ${DOCKER_REGISTRY-}gateway
+    hostname: "gateway"
     restart: always
+    ports:
+      - "5555:80"
     depends_on: 
       - eureka
     build:
       context: .
-      dockerfile: Gateway/Dockerfile
-
-  sql.database:
-      container_name: dockersql.database
-      image: microsoft/mssql-server-linux:2017-latest
-      environment:
-        - SA_PASSWORD=felipe123
-        - ACCEPT_EULA=Y
-      ports:
-        - "1433:1433"
-    
-
+      dockerfile: Gateway/Dockerfile    
+    links:
+      - eureka
   
 
 

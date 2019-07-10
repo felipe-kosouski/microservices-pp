@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Music.API.Models;
 
 namespace Music.API
 {
@@ -14,7 +15,7 @@ namespace Music.API
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args).Build().MigrateDatabase<MusicContext>().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

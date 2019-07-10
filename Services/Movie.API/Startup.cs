@@ -11,11 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Movie.API.Domain.Repositories;
-using Movie.API.Domain.Services;
-using Movie.API.Persistence.Contexts;
-using Movie.API.Persistence.Repositories;
-using Movie.API.Services;
+using Movie.API.Models;
 using Steeltoe.Discovery.Client;
 
 namespace Movie.API
@@ -34,13 +30,10 @@ namespace Movie.API
         {
             services.AddDiscoveryClient(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("Default"));
-            });
+            services.AddDbContext<MovieContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("Default"))
+            );
 
-            services.AddScoped<IMovieRepository, MovieRepository>();
-            services.AddScoped<IMovieService, MovieService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,20 +5,14 @@ services:
   gateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "5555:80"
 
   movie.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "5556:80"
 
 
   music.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "5557:80" 
 
 

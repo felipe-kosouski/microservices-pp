@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Steeltoe.Discovery.Client;
+using Ocelot.Provider.Eureka;
 
 namespace Gateway
 {
@@ -27,7 +28,8 @@ namespace Gateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDiscoveryClient(configuration);
-            services.AddOcelot(configuration);
+            services.AddOcelot().AddEureka();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

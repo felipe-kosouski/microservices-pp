@@ -1,53 +1,26 @@
 ﻿{
     "ReRoutes": [
-        {
-            "DownstreamPathTemplate": "/",
-            "DownstreamScheme": "http",
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "music.api",
-                    "Port": 80
-                }
-            ],
-            "UpstreamPathTemplate": "/music/",
-            "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ]
-        },
-        {
-            "DownstreamPathTemplate": "/{everything}",
-            "DownstreamScheme": "http",
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "music.api",
-                    "Port": 80
-                }
-            ],
-            "UpstreamPathTemplate": "/music/{everything}",
-            "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ]
-        },
-        {
-            "DownstreamPathTemplate": "/",
-            "DownstreamScheme": "http",
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "movie.api",
-                    "Port": 80
-                }
-            ],
-            "UpstreamPathTemplate": "/movie/",
-            "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ]
-        },
-        {
-            "DownstreamPathTemplate": "/{everything}",
-            "DownstreamScheme": "http",
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "movie.api",
-                    "Port": 80
-                }
-            ],
-            "UpstreamPathTemplate": "/movie/{everything}",
-            "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ]
-        }
+      {
+        "DownstreamPathTemplate": "/api/Movies/{everything}",
+        "DownstreamScheme": "http",
+        "UpstreamPathTemplate": "/movie/{everything}",
+        "ServiceName": "movieservice",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete"]
+      },
+      {
+        "DownstreamPathTemplate": "/api/Musics/{everything}",
+        "DownstreamScheme": "http",
+        "UpstreamPathTemplate": "/music/{everything}",
+        "ServiceName": "musicservice",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete"]
+      }
     ],
-    "GlobalConfiguration": {}
+    "GlobalConfiguration": {
+        "UseServiceDiscovery": true,
+        "ServiceDiscoveryProvider": {
+            "Port": "8761",
+            "Type": "Eureka",
+            "Host":  "eureka"
+        }
+    }    
 }

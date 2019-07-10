@@ -11,18 +11,16 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="Steeltoe.Discovery.ClientCore" Version="2.2.0" />
     <PackageReference Include="Ocelot.Provider.Eureka" Version="13.5.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\" />
-    <Folder Include="Domain\Models\" />
-    <Folder Include="Domain\Services\" />
-    <Folder Include="Services\" />
-    <Folder Include="Domain\Repositories\" />
-    <Folder Include="Persistence\" />
-    <Folder Include="Persistence\Contexts\" />
-    <Folder Include="Persistence\Repositories\" />
+    <Content Remove="Properties\launchSettings.json" />
+    <Content Remove="Views\Movies\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

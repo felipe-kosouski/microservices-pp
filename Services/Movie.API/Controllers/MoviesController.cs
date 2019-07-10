@@ -1,55 +1,105 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Movie.API.Domain.Services;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Microsoft.EntityFrameworkCore;
+using Movie.API.Models;
 
 namespace Movie.API.Controllers
 {
     [Route("api/[controller]")]
-    public class MoviesController : Controller
+    [ApiController]
+    public class MoviesController : ControllerBase
     {
-        private readonly IMovieService movieService;
+        private readonly MovieContext _context;
 
-        public MoviesController(IMovieService movieService)
+        public MoviesController(MovieContext context)
         {
-            this.movieService = movieService;
+            _context = context;
         }
 
-        // GET: api/values
+        // GET: api/Movies
         [HttpGet]
-        public async Task<IEnumerable<Domain.Models.Movie>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<Models.Movie>>> GetMovie()
         {
-            var movies = await movieService.ListAsync();
-            return movies;
+            return await _context.Movie.ToListAsync();
         }
 
-        // GET api/values/5
+        // GET: api/Movies/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<Models.Movie>> GetMovie(int id)
         {
-            return "value";
+            var movie = await _context.Movie.FindAsync(id);
+
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            return movie;
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
+        // PUT: api/Movies/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> PutMovie(int id, Models.Movie movie)
         {
+            if (id != movie.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(movie).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MovieExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // POST: api/Movies
+        [HttpPost]
+        public async Task<ActionResult<Models.Movie>> PostMovie(Models.Movie movie)
         {
+            _context.Movie.Add(movie);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
+        }
+
+        // DELETE: api/Movies/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Models.Movie>> DeleteMovie(int id)
+        {
+            var movie = await _context.Movie.FindAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            _context.Movie.Remove(movie);
+            await _context.SaveChangesAsync();
+
+            return movie;
+        }
+
+        private bool MovieExists(int id)
+        {
+            return _context.Movie.Any(e => e.Id == id);
         }
     }
 }
