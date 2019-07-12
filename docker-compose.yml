@@ -27,8 +27,6 @@ services:
     image: ${DOCKER_REGISTRY-}music
     hostname: "musicservice"
     restart: always
-    ports:
-      - "5557:80"
     links:
       - eureka
     build:
@@ -42,8 +40,6 @@ services:
     image: ${DOCKER_REGISTRY-}movie
     hostname: "movieservice"
     restart: always
-    ports:
-      - "5556:80"
     links:
       - eureka
     build:

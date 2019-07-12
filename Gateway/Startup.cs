@@ -28,7 +28,7 @@ namespace Gateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDiscoveryClient(configuration);
-            services.AddOcelot().AddEureka();
+            services.AddOcelot(configuration).AddEureka();
 
         }
 
@@ -40,8 +40,8 @@ namespace Gateway
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseOcelot().Wait();
             app.UseDiscoveryClient();
+            app.UseOcelot().Wait();
         }
     }
 }

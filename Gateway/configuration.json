@@ -1,26 +1,67 @@
 ﻿{
-    "ReRoutes": [
-      {
-        "DownstreamPathTemplate": "/api/Movies/{everything}",
-        "DownstreamScheme": "http",
-        "UpstreamPathTemplate": "/movie/{everything}",
-        "ServiceName": "movieservice",
-        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete"]
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/api/Movies",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/movies",
+      "ServiceName": "movieservice",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
       },
-      {
-        "DownstreamPathTemplate": "/api/Musics/{everything}",
-        "DownstreamScheme": "http",
-        "UpstreamPathTemplate": "/music/{everything}",
-        "ServiceName": "musicservice",
-        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete"]
-      }
-    ],
-    "GlobalConfiguration": {
-        "UseServiceDiscovery": true,
-        "ServiceDiscoveryProvider": {
-            "Port": "8761",
-            "Type": "Eureka",
-            "Host":  "eureka"
-        }
-    }    
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Movies/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/movies/{id}",
+      "ServiceName": "movieservice",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamHttpMethod": [
+        "Get",
+        "Put",
+        "Delete"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Musics",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/musics",
+      "ServiceName": "musicservice",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Musics/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamPathTemplate": "/musics/{id}",
+      "ServiceName": "musicservice",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamHttpMethod": [
+        "Get",
+        "Put",
+        "Delete"
+      ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "UseServiceDiscovery": true,
+    "ReRouteIsCaseSensitive": true,
+    "ServiceDiscoveryProvider": {
+      "Type": "Eureka",
+      "Host": "eureka",
+      "Port": "8761"
+    }
+  }
 }
